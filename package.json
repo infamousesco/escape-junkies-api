@@ -1,0 +1,28 @@
+{
+  "name": "escape-junkies-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infamousesco/escape-junkies-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/infamousesco/escape-junkies-api/issues"
+  },
+  "homepage": "https://github.com/infamousesco/escape-junkies-api#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "joi": "^17.6.0",
+    "mongoose": "^6.2.7",
+    "nodemon": "^2.0.15"
+  }
+}
