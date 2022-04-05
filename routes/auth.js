@@ -3,8 +3,8 @@ const router = express.Router();
 const User = require("../models/User");
 const { registerValidation, loginValidation } = require("../validation");
 const bcrypt = require("bcrypt");
-
-const Joi = require("joi");
+const jwt = require("jsonwebtoken");
+require("dotenv/config");
 
 router.post("/register", async (req, res) => {
   //User validation
@@ -43,11 +43,29 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  //User validation
   const loginValid = await loginValidation(req);
-  //Check for duplicate emails
+
+  //Check if email already in database
   const emailExist = await User.findOne({ email: req.body.email });
-  if (emailExist)
-    return res.status(400).json({ message: "User already exists" });
+  if (!emailExist) {
+    return res.status(400).json({ message: "Email not found." });
+  }
+  const validPassword = await bcrypt.compare(
+    req.body.password,
+    emailExist.password
+  );
+  if (!validPassword) {
+    return res.status(400).json({ message: "Password not found." });
+  }
+
+  if (!loginValid.error) {
+    //create user token
+    const token = jwt.sign({ id: emailExist.id }, process.env.TOKEN_SECRET);
+    res.header("auth-token", token).send("Login successful.");
+  } else {
+    res.status(400).send(loginValid.error.details[0].message);
+  }
 });
 
 module.exports = router;
