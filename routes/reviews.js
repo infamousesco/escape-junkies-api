@@ -24,13 +24,22 @@ router.get("/reviews/:id", async (req, res) => {
 
 router.put("/reviews/:id", private, async (req, res) => {
   const id = req.params.id;
+
   const updatedReview = {
     title: req.body.title,
     reviewBody: req.body.reviewBody,
   };
   try {
-    const review = await Review.findByIdAndUpdate(id, updatedReview);
-    res.status(200).json({ message: "Review updated successfully!" });
+    const review = await Review.findById(id);
+
+    if (review.author === req.user.id) {
+      const editReview = await Review.findOneAndUpdate(id, updatedReview);
+      res.status(200).json({ message: "Review updated successfully!" });
+    } else {
+      res
+        .status(401)
+        .json({ message: "You do not have permission to update this review." });
+    }
   } catch (err) {
     res.json({ message: err });
   }
@@ -40,6 +49,7 @@ router.post("/reviews", private, async (req, res) => {
   const review = new Review({
     title: req.body.title,
     reviewBody: req.body.reviewBody,
+    author: req.user.id,
   });
   try {
     const savedReview = await review.save();
