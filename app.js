@@ -12,10 +12,10 @@ const musingRoutes = require("./routes/musings");
 const otherRoutes = require("./routes/otherRoutes");
 const authRoutes = require("./routes/auth");
 
-app.use("/", reviewRoutes);
-app.use("/", musingRoutes);
-app.use("/", otherRoutes);
-app.use("/", authRoutes);
+app.use("/api", reviewRoutes);
+app.use("/api", musingRoutes);
+app.use("/api", otherRoutes);
+app.use("/api", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Home Page Has Moved!");
